@@ -1,0 +1,54 @@
+# .NET build results
+/bin/
+/obj/
+
+# ASP.NET Core
+wwwroot/
+appsettings.json
+appsettings.Development.json
+
+# Entity Framework Core
+/revolu.db
+/revolu.db-shm
+/revolu.db-wal
+
+# User-specific files
+.vs/
+.vscode/
+.idea/
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# Rider, Visual Studio for Mac, or other IDEs
+.idea/
+
+# Logs
+/logs/
+*.log
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# macOS Finder
+.DS_Store
+
+# Windows Installer files
+Thumbs.db
+ehthumbs.db
+
+# Node.js dependencies (if using Node.js for front-end)
+node_modules/
+
+# NPM package lock files
+package-lock.json
+
+# ASP.NET development certificate
+/.aspnet/https/
+
+# JetBrains Rider configuration folder
+.idea/
