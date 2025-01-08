@@ -3,7 +3,7 @@ using WebApplication1.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Ajouter Swagger pour la documentation
+// Ajouter Swagger pour la documentation meme si cela est innutile.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<RevoluDbContext>();
@@ -11,19 +11,19 @@ builder.Services.AddDbContext<RevoluDbContext>();
 // Ajouter le service CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins("http://localhost:5173") // Remplace par l'origine autorisée
             .AllowAnyMethod()
-            .AllowAnyHeader();
+            .AllowAnyHeader()
+            .AllowCredentials(); // Nécessaire si tu utilises des cookies ou des tokens
     });
 });
-
 // Ajouter les services pour les contrôleurs
 builder.Services.AddControllers();
 
 var app = builder.Build();
-app.UseCors("AllowAll");
+app.UseCors("AllowFrontend");
 app.Use(async (context, next) =>
 {
     if (context.Request.Method == HttpMethods.Options)
@@ -48,7 +48,7 @@ app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/auth") || c
     builder.UseMiddleware<AuthorizationMiddleware>();
 });
 
-app.UseHttpsRedirection();
+app.UseHttpsRedirection(); // WTF is that
 app.UseAuthorization();
 
 // Activer les contrôleurs

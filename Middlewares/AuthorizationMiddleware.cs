@@ -24,7 +24,6 @@ public class AuthorizationMiddleware
                 var user = dbContext.Users.FirstOrDefault(u => u.Token == token);
                 if (user != null)
                 {
-                    Console.WriteLine(token);
 
                     context.Items["User"] = user;
                 }

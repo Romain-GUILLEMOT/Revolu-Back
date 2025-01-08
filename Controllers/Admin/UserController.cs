@@ -9,7 +9,7 @@ using WebApplication1.Database;
 namespace WebApplication1.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/admin/[controller]")]
 public class UserController: ControllerBase
 {
     
@@ -53,23 +53,14 @@ public class UserController: ControllerBase
         return $"{bankCode}{countryCode}{locationCode}{branchCode}";
     }
     [HttpPost("create")]
-    public string create([FromBody] CreateProps props, RevoluDbContext db)
+    public IActionResult create([FromBody] CreateProps props, RevoluDbContext db)
     {
-        Console.WriteLine("AA" + props.firstName);
-        if(props.token != "a7B9c1D3eF5G7h9I2J4kL6M8nO0PqRsTuVwXyZ1a3b5c7d9EfGhIjKlMnOpQrStUvWxYz0123456789ABCDEF")
-        {
-            return JsonConvert.SerializeObject(new
-            {
-                status = false,
-                message = "Token incorrect"
-            });
-        }
         try
         {
             if (string.IsNullOrWhiteSpace(props.firstName) || string.IsNullOrWhiteSpace(props.lastName) ||
                 string.IsNullOrWhiteSpace(props.email) || string.IsNullOrWhiteSpace(props.password))
             {
-                return JsonConvert.SerializeObject(new
+                return BadRequest(new
                 {
                     status = false,
                     message = "Tous les champs sont requis."
@@ -79,7 +70,7 @@ public class UserController: ControllerBase
             var existingUser = db.Users.FirstOrDefault(u => u.Email == props.email);
             if (existingUser != null)
             {
-                return JsonConvert.SerializeObject(new
+                return BadRequest(new
                 {
                     status = false,
                     message = "Un utilisateur avec cet email existe déjà."
@@ -101,7 +92,7 @@ public class UserController: ControllerBase
             db.Users.Add(user);
             db.SaveChanges();
 
-            return JsonConvert.SerializeObject(new
+            return Ok(new
             {
                 status = true,
                 message = "Utilisateur créé avec succès."
@@ -109,7 +100,7 @@ public class UserController: ControllerBase
         }
         catch (Exception ex)
         {
-            return JsonConvert.SerializeObject(new
+            return StatusCode(500, new
             {
                 status = false,
                 message = $"Erreur lors de la création de l'utilisateur : {ex.Message}"

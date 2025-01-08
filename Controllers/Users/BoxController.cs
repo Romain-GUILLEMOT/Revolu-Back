@@ -62,14 +62,15 @@ public class BoxController : ControllerBase
             });
         }
         var box = db.Boxes.FirstOrDefault(b => b.Id == id && b.UserId == user.Id);
-        if (box == null)
+        if (box == null || box.UserId != user.Id)
         {
             return JsonConvert.SerializeObject(new
             {
                 status = false,
-                message = "Boite introuvable!"
+                message = "Boîte introuvable ou non autorisée!"
             });
         }
+
         var transaction = db.Transactions.Where(t => t.BoxId == box.Id).Select(t => new
         {
             t.Name,
